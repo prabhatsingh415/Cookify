@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="./output.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Modak&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Modak&display=swap"
+      rel="stylesheet"
+    />
+    <title>Recipe</title>
+  </head>
+  <body class="bg-[#121212] p-6">
+    <div class="h-screen w-full my-4 p-4">
+      <h1
+        id="recipeTitle"
+        class="text-center text-5xl m-2 font-modak text-[#fcfcfc]"
+      ></h1>
+      <div id="assest-container" class="flex flex-col gap-8 m-4">
+        <div id="image-container" class="h-96 rounded-xl shadow-md"></div>
+        <div class="flex gap-2 items-center justify-center lg:gap-0">
+          <h2 class="w-1/5 lg:w-24 font-inter text-[#fcfcfc]">Progress</h2>
+          <div
+            id="progressBar"
+            class="h-8 w-4/5 lg:w-xl border rounded-2xl border-[#ff5100]"
+          >
+            <div
+              id="progressFill"
+              class="h-full w-0 bg-[#ff5100] transition-all duration-300 rounded-2xl"
+            ></div>
+          </div>
+        </div>
+
+        <h1 class="text-xl lg:text-3xl my-8 mx-2 font-inter text-[#fcfcfc]">
+          RECIPE:-
+        </h1>
+        <div id="recipe-container"></div>
+      </div>
+    </div>
+    <script src="recipe.js"></script>
+  </body>
+</html>
