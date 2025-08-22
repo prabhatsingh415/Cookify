@@ -1,5 +1,4 @@
 @import "tailwindcss";
-/* 🌑 Black (#0F172A) – background 🌕 Gold/Yellow (#FACC15) – highlights / progress bar 🌿 Sage Green (#A3E635) – accents ⚪ White (#F8FAFC) – text */
 @theme {
   --font-modak: "Modak", cursive;
   --font-inter: "Inter", sans-serif;

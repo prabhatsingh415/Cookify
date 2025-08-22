@@ -96,35 +96,93 @@ if (recipe) {
   image.style.backgroundPosition = "center";
   image.className = "h-48 md:h-96 w-full rounded-xl shadow-md";
 
-  container.innerHTML = `
-    <div class="bg-[#f2f2f2] p-6 rounded-xl shadow-lg">
-      <h2 class="text-2xl font-bold mb-2 font-inter text-[#262915]">Ingredients</h2>
-      <ul id="ingredients-list" class="list-none space-y-2 mb-4">
-        ${recipe.ingredients
-          .map(
-            (item, i) => `
-          <li class="flex items-center gap-2">
-            <input type="checkbox" id="ingredient-${i}" class="w-5 h-5 accent-[#ff5100]" />
-            <label for="ingredient-${i}" class="text-[#262915] font-inter">${item}</label>
-          </li>`
-          )
-          .join("")}
-      </ul>
-      <h2 class="text-2xl font-bold mb-2 font-inter text-[#262915]">Steps</h2>
-      <ol id="steps-list" class="list-decimal list-inside space-y-2">
-        ${recipe.steps
-          .map(
-            (item, i) => `
-          <li class="flex items-center gap-2">
-            <input type="checkbox" id="step-${i}" class="w-5 h-5 accent-[#ff5100]" />
-            <label for="step-${i}" class="text-[#262915] font-inter">${item}</label>
-          </li>`
-          )
-          .join("")}
-      </ol>
-    </div>
-  `;
+  // Ingredients
+  const ingredientsContainer = document.getElementById("ingredients-list");
+  recipe.ingredients.forEach((item, i) => {
+    const li = document.createElement("li");
+    li.className = "flex items-center gap-2";
 
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.id = `ingredient-${i}`;
+    checkbox.className = "w-5 h-5 accent-[#ff5100]";
+
+    const label = document.createElement("label");
+    label.htmlFor = `ingredient-${i}`;
+    label.textContent = item;
+    label.className = "text-[#262915] font-inter";
+
+    li.appendChild(checkbox);
+    li.appendChild(label);
+    ingredientsContainer.appendChild(li);
+  });
+
+  // Steps with Timer
+  const stepsContainer = document.getElementById("steps-list");
+  const timerDisplay = document.getElementById("timer");
+
+  let timer;
+  let timeLeft = 0;
+  let currentStep = 0;
+  const stepTime = 60; // seconds per step
+
+  recipe.steps.forEach((step, i) => {
+    const li = document.createElement("li");
+    li.className = "flex items-center gap-2";
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.id = `step-${i}`;
+    checkbox.className = "w-5 h-5 accent-[#ff5100]";
+
+    const label = document.createElement("label");
+    label.htmlFor = `step-${i}`;
+    label.textContent = step;
+    label.className = "text-[#262915] font-inter";
+
+    li.appendChild(checkbox);
+    li.appendChild(label);
+    stepsContainer.appendChild(li);
+
+    checkbox.addEventListener("change", () => {
+      if (checkbox.checked) {
+        if (i === currentStep) {
+          startTimer();
+          currentStep++;
+        }
+        updateProgress();
+      }
+    });
+  });
+
+  function startTimer() {
+    clearInterval(timer);
+    timeLeft = stepTime;
+    updateTimerDisplay();
+
+    timer = setInterval(() => {
+      timeLeft--;
+      updateTimerDisplay();
+
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+        highlightFailedStep();
+      }
+    }, 1000);
+  }
+
+  function updateTimerDisplay() {
+    timerDisplay.textContent = `⏱️ Time left: ${timeLeft}s`;
+  }
+
+  function highlightFailedStep() {
+    const failedStep = document.querySelector(`#step-${currentStep}`);
+    if (failedStep) {
+      failedStep.parentElement.querySelector("label").style.color = "red";
+    }
+  }
+
+  // Progress Bar
   const ingredientsCheckboxes = document.querySelectorAll(
     "#ingredients-list input"
   );
@@ -151,5 +209,18 @@ if (recipe) {
     cb.addEventListener("change", updateProgress)
   );
 } else {
-  document.body.innerHTML = `<p class="text-center text-[#C64B3F] text-2xl mt-20">Recipe not found!</p>`;
+  document.body.innerHTML = `
+    <div class="flex flex-col items-center justify-center h-screen text-center">
+      <div class="bg-[#1E1E1E] p-8 rounded-2xl shadow-lg max-w-md">
+        <div class="text-6xl mb-4">🍳</div>
+        <h2 class="text-3xl font-bold text-[#C64B3F] mb-2">Recipe Not Found</h2>
+        <p class="text-[#f2f2f2] my-4">The recipe you’re looking for doesn’t exist or was removed.</p>
+        <button 
+          onclick="window.location.href='index.html'" 
+          class="px-6 py-2 bg-[#ff5100] text-white rounded-xl hover:opacity-90 transition">
+          🔙 Go Home
+        </button>
+      </div>
+    </div>
+  `;
 }
